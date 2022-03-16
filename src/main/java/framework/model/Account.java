@@ -3,7 +3,9 @@ package framework.model;
 import framework.notification.EmailObserver;
 import framework.notification.Observable;
 import framework.notification.Observer;
+import framework.notification.Report;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +18,8 @@ public abstract class Account implements Observable {
     private List<AccountEntry> entryList = new ArrayList<AccountEntry>();
 
     private List<Observer> observers = new ArrayList<>();
+
+    public abstract Report report(LocalDate from, LocalDate to);
 
     public Account(Customer customer, String accountNumber) {
         this.setCustomer(customer);
@@ -56,6 +60,10 @@ public abstract class Account implements Observable {
         entryList.add(fromEntry);
 
         toAccount.addEntry(toEntry);
+    }
+
+    public List<AccountEntry> getEntryList() {
+        return entryList;
     }
 
     public String getAccountNumber() {

@@ -4,7 +4,10 @@ import banking.repository.AccountDAO;
 import banking.repository.AccountDAOImpl;
 import framework.model.Account;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -66,4 +69,11 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountDAO.loadAccount(accountNumber);
         account.addInterest();
     }
+
+    @Override
+    public List<String> generateReport(String[] accountNumbers, LocalDate from, LocalDate to) {
+        return null;
+    }
+
+
 }
