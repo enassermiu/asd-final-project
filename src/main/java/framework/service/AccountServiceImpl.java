@@ -24,7 +24,6 @@ public class AccountServiceImpl implements AccountService {
 
 	public Account saveAccount(Account account) {
 		accountDAO.saveAccount(account);
-		
 		return account;
 	}
 
