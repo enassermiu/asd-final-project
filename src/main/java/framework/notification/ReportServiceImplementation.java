@@ -18,12 +18,12 @@ public class ReportServiceImplementation implements Report{
     }
 
 
-    public List<String> generateReport(String[] accountNumbers, LocalDate from, LocalDate to) {
+    public List<String> generateReport(Account[] accounts, LocalDate from, LocalDate to) {
         List<String> reports = new ArrayList<>();
 
-        for(String accountNumber : accountNumbers) {
+        for(Account account : accounts) {
             if(account != null) {
-                reports.add(account.report(from, to).toString());
+                reports.add(generateReport(account));
             }
         }
         return reports;
@@ -48,7 +48,7 @@ public class ReportServiceImplementation implements Report{
             List<AccountEntry> etnries = entryList.stream().filter(entry -> entry.getDate().equals(lastMonthLatest.get())).toList();
 
             //last month's balance
-            previousMonthBalance = etnries.get(0).getAmount();
+            previousMonthBalance = etnries.get(0).getRemainingBalance();
         }
         else{
             //no previous balance (account newer than 1 month)

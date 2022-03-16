@@ -6,13 +6,15 @@ import java.util.Date;
 public class AccountEntry {
 	private LocalDate date;
 	private double amount;
+	private double remainingBalance;
 	private String description;
 	private String fromAccountNumber;
 	private String fromPersonName;
-	
+
+
 	public AccountEntry() {
 	}
-
+//todo: save remaining balance as well
 	public AccountEntry(double amount, String description, String fromAccountNumber, String fromPersonName) {
 		super();
 		this.date = LocalDate.now();
@@ -61,4 +63,13 @@ public class AccountEntry {
 	public void setFromPersonName(String fromPersonName) {
 		this.fromPersonName = fromPersonName;
 	}
+
+	public double getRemainingBalance() {
+		return remainingBalance;
+	}
+
+	public void setRemainingBalance(double remainingBalance) {
+		this.remainingBalance = remainingBalance;
+	}
+
 }
