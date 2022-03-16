@@ -12,6 +12,10 @@ public class CompanyAccount extends Customer {
         this.noOfEmployees = noOfEmployees;
     }
 
+    public String getCustomerTpeCode(){
+        return "C";
+    }
+
     public String getNoOfEmployees() {
         return noOfEmployees;
     }

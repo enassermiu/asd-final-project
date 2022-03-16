@@ -25,6 +25,12 @@ public class SilverCredit extends CreditCardAccount {
             notifyObservers("you are charged for more than $400"+amount);
         super.withdraw(amount);
     }
+
+    @Override
+    public String getAccountTypeCode() {
+        return "S";
+    }
+
     @Override
     public void addInterest() {
 

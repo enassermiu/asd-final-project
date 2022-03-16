@@ -1,5 +1,8 @@
 package ui.ccard;
 
+import framework.service.AccountService;
+import framework.service.AccountServiceImpl;
+
 import java.awt.BorderLayout;
 
 import javax.swing.JOptionPane;
@@ -13,7 +16,9 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CardFrm extends javax.swing.JFrame
 {
-    /****
+	private AccountService accountService;
+
+	/****
      * init variables in the object
      ****/
     String clientName,street,city, zip, state,accountType,amountDeposit,expdate, ccnumber;
@@ -27,7 +32,10 @@ public class CardFrm extends javax.swing.JFrame
 	public CardFrm()
 	{
 		thisframe=this;
-		
+
+		accountService = AccountServiceImpl.getInstance();
+		accountService.seedsAccounts();
+
 		setTitle("Credit-card processing Application.");
 		setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0,0));
@@ -176,7 +184,6 @@ public class CardFrm extends javax.swing.JFrame
 				JButtonDeposit_actionPerformed(event);
 			else if (object == JButton_Withdraw)
 				JButtonWithdraw_actionPerformed(event);
-			
 		}
 	}
     
@@ -210,9 +217,6 @@ public class CardFrm extends javax.swing.JFrame
             JTable1.getSelectionModel().setAnchorSelectionIndex(-1);
             newaccount=false;
         }
-
-       
-        
     }
 
 	void JButtonGenerateBill_actionPerformed(java.awt.event.ActionEvent event)
@@ -220,7 +224,6 @@ public class CardFrm extends javax.swing.JFrame
 		JDialogGenBill billFrm = new JDialogGenBill();
 		billFrm.setBounds(450, 20, 400, 350);
 		billFrm.show();
-	    
 	}
 
 	void JButtonDeposit_actionPerformed(java.awt.event.ActionEvent event)
@@ -242,8 +245,6 @@ public class CardFrm extends javax.swing.JFrame
 		    long newamount=currentamount+deposit;
 		    model.setValueAt(String.valueOf(newamount),selection, 4);
 		}
-		
-		
 	}
 
 	void JButtonWithdraw_actionPerformed(java.awt.event.ActionEvent event)
@@ -268,8 +269,5 @@ public class CardFrm extends javax.swing.JFrame
 		       JOptionPane.showMessageDialog(JButton_Withdraw, " "+name+" Your balance is negative: $"+String.valueOf(newamount)+" !","Warning: negative balance",JOptionPane.WARNING_MESSAGE);
 		    }
 		}
-		
-		
 	}
-	
 }

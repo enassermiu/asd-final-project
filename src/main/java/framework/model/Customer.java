@@ -2,7 +2,7 @@ package framework.model;
 
 import java.util.List;
 
-public class Customer {
+public abstract class Customer {
 
 	private String name;
 	private String email;
@@ -16,6 +16,8 @@ public class Customer {
 		this.email = email;
 		this.address = address;
 	}
+
+	public abstract String getCustomerTpeCode();
 
 	public String getName() {
 		return name;

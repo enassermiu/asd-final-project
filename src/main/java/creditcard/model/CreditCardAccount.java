@@ -39,6 +39,7 @@ public abstract class CreditCardAccount extends Account {
     public  void  withdraw(double amount){
         if(amount>400)
             notifyObservers("you are charged for more than $400"+ amount);
+
         super.withdraw(amount);
     }
 }

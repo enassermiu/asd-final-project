@@ -1,5 +1,6 @@
 package ui.ccard;
 
+import banking.model.PersonalAccount;
 import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
@@ -167,7 +168,8 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());
-        Customer customer = new Customer(JTextField_NAME.getText(), JTextField_NoOfEmp.getText(), address);
+        Customer customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_NoOfEmp.getText(),
+                "00/00/0000", address);
         Account account = accountCreator.CreatAccount(customer, "000");
         accountService.saveAccount(account);
 

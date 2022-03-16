@@ -10,11 +10,9 @@ import java.util.List;
 public abstract class Account implements Observable {
 
     private String accountNumber;
-
     private Customer customer;
 
     private List<AccountEntry> entryList = new ArrayList<AccountEntry>();
-
     private List<Observer> observers = new ArrayList<>();
 
     public Account(Customer customer, String accountNumber) {
@@ -44,21 +42,6 @@ public abstract class Account implements Observable {
 
     }
 
-    private void addEntry(AccountEntry entry) {
-        entryList.add(entry);
-    }
-
-    public void transferFunds(Account toAccount, double amount, String description) {
-        AccountEntry fromEntry = new AccountEntry(-amount, description, toAccount.getAccountNumber(),
-                toAccount.getCustomer().getName());
-        AccountEntry toEntry = new AccountEntry(amount, description, toAccount.getAccountNumber(),
-                toAccount.getCustomer().getName());
-
-        entryList.add(fromEntry);
-
-        toAccount.addEntry(toEntry);
-    }
-
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -66,6 +49,8 @@ public abstract class Account implements Observable {
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
     }
+
+    public abstract String getAccountTypeCode();
 
     public Customer getCustomer() {
         return customer;
@@ -90,8 +75,4 @@ public abstract class Account implements Observable {
             o.send(this.getCustomer().getEmail(), message);
         }
     }
-
-      /*When a deposit or withdrawal is done to a company account, the system sends the company an
-        Email about the transaction.*/
-
 }

@@ -15,9 +15,14 @@ public class SavingAccount extends Account {
             notifyObservers("Transaction over $500");
         super.withdraw(amount);
     }
+
+    @Override
+    public String getAccountTypeCode() {
+        return "S";
+    }
+
     @Override
     public void addInterest() {
 
     }
-
 }

@@ -16,10 +16,14 @@ public class CheckingAccount extends Account {
 
         super.withdraw(amount);
     }
+
+    @Override
+    public String getAccountTypeCode() {
+        return "C";
+    }
+
     @Override
     public void addInterest() {
 
     }
-
-
 }

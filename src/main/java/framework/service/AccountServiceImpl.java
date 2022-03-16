@@ -1,9 +1,14 @@
 package framework.service;
 
+import banking.model.PersonalAccount;
+import banking.model.SavingAccount;
 import banking.repository.AccountDAO;
 import banking.repository.AccountDAOImpl;
 import framework.model.Account;
+import framework.model.Address;
+import framework.model.Customer;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 public class AccountServiceImpl implements AccountService {
@@ -33,9 +38,9 @@ public class AccountServiceImpl implements AccountService {
 
     public void deposit(String accountNumber, double amount) throws Exception {
         Account account = accountDAO.loadAccount(accountNumber);
-        if(account == null) {
+        if (account == null) {
             throw new Exception("Account Not Found!");
-        } else if(amount < 0) {
+        } else if (amount < 0) {
             throw new Exception("Can't Deposit a negative amount!");
         } else {
             account.deposit(amount);
@@ -58,17 +63,24 @@ public class AccountServiceImpl implements AccountService {
         accountDAO.updateAccount(account);
     }
 
-    public void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description) {
-        Account fromAccount = accountDAO.loadAccount(fromAccountNumber);
-        Account toAccount = accountDAO.loadAccount(toAccountNumber);
-        fromAccount.transferFunds(toAccount, amount, description);
-        accountDAO.updateAccount(fromAccount);
-        accountDAO.updateAccount(toAccount);
-    }
-
-    @Override
     public void addInterest(String accountNumber) {
         Account account = accountDAO.loadAccount(accountNumber);
         account.addInterest();
+    }
+
+    public void addInterest() {
+        getAllAccounts().forEach(a -> {
+            a.addInterest();
+        });
+    }
+
+    public void seedsAccounts(){
+        Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
+        Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
+        Account[] accounts = {
+                new SavingAccount(customer, "100")
+        };
+
+        Arrays.stream(accounts).forEach(a -> saveAccount(a));
     }
 }
