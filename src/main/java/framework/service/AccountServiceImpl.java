@@ -10,8 +10,11 @@ import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -110,4 +113,11 @@ public class AccountServiceImpl implements AccountService {
             saveAccount(a);
         });
     }
+
+    @Override
+    public List<String> generateReport(String[] accountNumbers, LocalDate from, LocalDate to) {
+        return null;
+    }
+
+
 }

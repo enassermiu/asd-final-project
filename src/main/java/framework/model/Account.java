@@ -45,6 +45,9 @@ public abstract class Account implements Observable {
 
     public final void withdraw(double amount) {
         AccountEntry entry = new AccountEntry(-amount, "withdraw", "", "");
+
+        //track remaining balance
+        entry.setRemainingBalance(getBalance());
         entryList.add(entry);
 
         String transactionDesc = "The amount: '" + amount + "' has been withdrawn from your account: '"
@@ -69,6 +72,10 @@ public abstract class Account implements Observable {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public List<AccountEntry> getEntryList() {
+        return entryList;
     }
 
     public void add(Observer o) {
