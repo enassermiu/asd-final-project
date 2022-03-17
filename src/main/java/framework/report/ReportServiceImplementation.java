@@ -1,13 +1,11 @@
-package framework.notification;
+package framework.report;
 
 import creditcard.model.CreditCardAccount;
 import framework.model.Account;
 import framework.model.AccountEntry;
-import org.w3c.dom.ls.LSOutput;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ReportServiceImplementation implements Report{
 

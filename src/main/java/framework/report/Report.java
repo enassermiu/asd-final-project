@@ -1,4 +1,4 @@
-package framework.notification;
+package framework.report;
 
 import framework.model.Account;
 
