@@ -4,17 +4,15 @@ import framework.model.Account;
 import framework.service.AccountService;
 import framework.service.command.Command;
 
-public class DepositCommand implements Command {
+public class AddCompanyCreditCardAccountCommand implements Command {
     AccountService accountService;
 
-    public DepositCommand(AccountService accountService) {
+    public AddCompanyCreditCardAccountCommand(AccountService accountService) {
         this.accountService = accountService;
     }
 
     @Override
     public void execute(Object... args) throws Exception {
-        String accountNumber = (String) args[0];
-        double amount = Double.parseDouble(args[1].toString());
-        accountService.deposit(accountNumber, amount);
+        accountService.saveAccount((Account) args[0]);
     }
 }

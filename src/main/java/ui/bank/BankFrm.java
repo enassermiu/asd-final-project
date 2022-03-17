@@ -5,6 +5,7 @@ import framework.model.Account;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
 import framework.service.command.CommandInvoker;
+import ui.ccard.JDialogGenBill;
 
 import java.awt.*;
 import java.util.Collection;
@@ -85,6 +86,9 @@ public class BankFrm extends javax.swing.JFrame {
         JButton_Addinterest.setBounds(448, 20, 106, 33);
         JButton_Addinterest.setText("Add interest");
         JPanel1.add(JButton_Addinterest);
+        JButton_Report.setBounds(455, 60, 106, 33);
+        JButton_Report.setText("Report");
+        JPanel1.add(JButton_Report);
         JButton_Withdraw.setBounds(468, 164, 96, 33);
         JButton_Exit.setText("Exit");
         JPanel1.add(JButton_Exit);
@@ -104,7 +108,7 @@ public class BankFrm extends javax.swing.JFrame {
         JButton_Deposit.addActionListener(lSymAction);
         JButton_Withdraw.addActionListener(lSymAction);
         JButton_Addinterest.addActionListener(lSymAction);
-
+        JButton_Report.addActionListener(lSymAction);
         updateAccountGrid();
 
         setCommands();
@@ -150,6 +154,7 @@ public class BankFrm extends javax.swing.JFrame {
     javax.swing.JButton JButton_Deposit = new javax.swing.JButton();
     javax.swing.JButton JButton_Withdraw = new javax.swing.JButton();
     javax.swing.JButton JButton_Addinterest = new javax.swing.JButton();
+    javax.swing.JButton JButton_Report = new javax.swing.JButton();
     javax.swing.JButton JButton_Exit = new javax.swing.JButton();
 
     void exitApplication() {
@@ -195,6 +200,13 @@ public class BankFrm extends javax.swing.JFrame {
                 JButtonDeposit_actionPerformed(event);
             else if (object == JButton_Withdraw)
                 JButtonWithdraw_actionPerformed(event);
+            else if (object == JButton_Report) {
+                try {
+                    JButtonGenerateReport_actionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             else if (object == JButton_Addinterest) {
                 try {
                     JButtonAddinterest_actionPerformed(event);
@@ -283,6 +295,11 @@ public class BankFrm extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(JButton_Addinterest, "Add interest to all accounts",
                 "Add interest to all accounts", JOptionPane.WARNING_MESSAGE);
+    }
+
+    void JButtonGenerateReport_actionPerformed(java.awt.event.ActionEvent event) throws Exception {
+        JDialogGenRepo reportFrm = new JDialogGenRepo(myframe);
+        reportFrm.show();
     }
 
     private void addAccountToGrid(Account account) {

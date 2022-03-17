@@ -53,7 +53,7 @@ public class CardFrm extends javax.swing.JFrame {
         getContentPane().add(BorderLayout.CENTER, JPanel1);
         JPanel1.setBounds(0, 0, 575, 310);
 		/*
-		/Add five buttons on the pane
+		/Add five buttons on the pane 
 		/for Adding personal account, Adding company account
 		/Deposit, Withdraw and Exit from the system
 		*/
@@ -74,9 +74,14 @@ public class CardFrm extends javax.swing.JFrame {
         JTable1.setBounds(0, 0, 420, 0);
 //        rowdata = new Object[8];
 
-        JButton_NewCCAccount.setText("Add Credit-card account");
+        JButton_NewCCAccount.setText("Add Personal Credit-card account");
         JPanel1.add(JButton_NewCCAccount);
         JButton_NewCCAccount.setBounds(24, 20, 192, 33);
+
+        JButton_NewCompanyCCAccount.setText("Add Company Credit-card account");
+        JPanel1.add(JButton_NewCompanyCCAccount);
+        JButton_NewCompanyCCAccount.setBounds(24, 50, 192, 33);
+
         JButton_GenBill.setText("Generate Monthly bills");
         JButton_GenBill.setActionCommand("jbutton");
         JPanel1.add(JButton_GenBill);
@@ -99,6 +104,7 @@ public class CardFrm extends javax.swing.JFrame {
         SymAction lSymAction = new SymAction();
         JButton_Exit.addActionListener(lSymAction);
         JButton_NewCCAccount.addActionListener(lSymAction);
+        JButton_NewCompanyCCAccount.addActionListener(lSymAction);
         JButton_GenBill.addActionListener(lSymAction);
         JButton_Deposit.addActionListener(lSymAction);
         JButton_Withdraw.addActionListener(lSymAction);
@@ -112,7 +118,9 @@ public class CardFrm extends javax.swing.JFrame {
         this.commandInvoker.addCommand("CHARGE", new ChargeCommand(accountService));
         this.commandInvoker.addCommand("GENERATE_MONTHLY_BILL", new GenerateMonthlyBillCommand(accountService));
         this.commandInvoker.addCommand("ADD_CREDIT_CARD_ACCOUNT", new AddCreditCardAccountCommand(accountService));
+        this.commandInvoker.addCommand("ADD_COMPANY_CREDIT_CARD_ACCOUNT", new AddCompanyCreditCardAccountCommand(accountService));
         this.commandInvoker.addCommand("ADD_INTEREST", new AddInterestCommand(accountService));
+
     }
 
 
@@ -143,6 +151,7 @@ public class CardFrm extends javax.swing.JFrame {
 
     javax.swing.JPanel JPanel1 = new javax.swing.JPanel();
     javax.swing.JButton JButton_NewCCAccount = new javax.swing.JButton();
+    javax.swing.JButton JButton_NewCompanyCCAccount = new javax.swing.JButton();
     javax.swing.JButton JButton_GenBill = new javax.swing.JButton();
     javax.swing.JButton JButton_Deposit = new javax.swing.JButton();
     javax.swing.JButton JButton_Withdraw = new javax.swing.JButton();
@@ -186,6 +195,8 @@ public class CardFrm extends javax.swing.JFrame {
                 JButtonExit_actionPerformed(event);
             else if (object == JButton_NewCCAccount)
                 JButtonNewCCAC_actionPerformed(event);
+            else if (object == JButton_NewCompanyCCAccount)
+                JButtonNewCompanyCCAccount_actionPerformed(event);
             else if (object == JButton_GenBill)
                 JButtonGenerateBill_actionPerformed(event);
             else if (object == JButton_Deposit)
@@ -204,11 +215,30 @@ public class CardFrm extends javax.swing.JFrame {
     void JButtonNewCCAC_actionPerformed(java.awt.event.ActionEvent event) {
 		/*
 		 JDialog_AddPAcc type object is for adding personal information
+		 construct a JDialog_AddPAcc type object 
+		 set the boundaries and show it 
+		*/
+
+        JDialog_AddCCAccount ccac = new JDialog_AddCCAccount(commandInvoker.getCommand("ADD_CREDIT_CARD_ACCOUNT"), thisframe);
+        ccac.show();
+
+        if (newaccount) {
+            // add row to table
+            addAccountToGrid((CreditCardAccount)accountService.getAccount(ccnumber));
+
+            JTable1.getSelectionModel().setAnchorSelectionIndex(-1);
+            newaccount = false;
+        }
+    }
+
+    void JButtonNewCompanyCCAccount_actionPerformed(java.awt.event.ActionEvent event) {
+		/*
+		 JDialog_AddPAcc type object is for adding personal information
 		 construct a JDialog_AddPAcc type object
 		 set the boundaries and show it
 		*/
 
-        JDialog_AddCCAccount ccac = new JDialog_AddCCAccount(commandInvoker.getCommand("ADD_CREDIT_CARD_ACCOUNT"), thisframe);
+        JDialog_AddCompAcc ccac = new JDialog_AddCompAcc(commandInvoker.getCommand("ADD_COMPANY_CREDIT_CARD_ACCOUNT"), thisframe);
         ccac.show();
 
         if (newaccount) {

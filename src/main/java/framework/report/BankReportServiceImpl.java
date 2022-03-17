@@ -51,8 +51,8 @@ public class BankReportServiceImpl implements ReportService {
         double previousBalance = account.getBalance() - totalCredits + totalCharges;
 
         return account.getCustomer().getName() + ": " +
-                account.getAccountTypeCode()  + "-" + account.getAccountNumber() +
+                account.getAccountTypeCode()  + "-" + account.getAccountNumber() + System.lineSeparator()  +
                 "Last Month's balance : '" + previousBalance + "'" + System.lineSeparator() +
-                "Current Month's balance" + account.getBalance() + "'" ;
+                "Current Month's balance: '" + account.getBalance() + "'" ;
     }
 }

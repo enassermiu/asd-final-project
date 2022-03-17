@@ -14,7 +14,7 @@ public class ChargeCommand implements Command {
     @Override
     public void execute(Object... args) throws Exception {
         String accountNumber = (String) args[0];
-        double amount = Double.parseDouble((String) args[1]);
+        double amount = Double.parseDouble(args[1].toString());
         accountService.withdraw(accountNumber, amount);
     }
 }
