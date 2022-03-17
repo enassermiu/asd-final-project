@@ -1,9 +1,11 @@
 package ui.ccard;
 
+import creditcard.commands.*;
 import creditcard.model.CreditCardAccount;
 import framework.model.Account;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.CommandInvoker;
 
 import java.awt.BorderLayout;
 import java.util.Collection;
@@ -18,6 +20,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CardFrm extends javax.swing.JFrame {
     private AccountService accountService;
+    private CommandInvoker commandInvoker;
+
 
     /****
      * init variables in the object
@@ -33,6 +37,8 @@ public class CardFrm extends javax.swing.JFrame {
         thisframe = this;
 
         accountService = AccountServiceImpl.getInstance();
+        this.commandInvoker = new CommandInvoker();
+
         accountService.seedCreditAccounts();
 
         setTitle("Credit-card processing Application.");
@@ -47,7 +53,7 @@ public class CardFrm extends javax.swing.JFrame {
         getContentPane().add(BorderLayout.CENTER, JPanel1);
         JPanel1.setBounds(0, 0, 575, 310);
 		/*
-		/Add five buttons on the pane 
+		/Add five buttons on the pane
 		/for Adding personal account, Adding company account
 		/Deposit, Withdraw and Exit from the system
 		*/
@@ -98,6 +104,15 @@ public class CardFrm extends javax.swing.JFrame {
         JButton_Withdraw.addActionListener(lSymAction);
 
         updateAccountGrid();
+        setCommands();
+    }
+
+    private void setCommands() {
+        this.commandInvoker.addCommand("DEPOSIT", new DepositCommand(accountService));
+        this.commandInvoker.addCommand("CHARGE", new ChargeCommand(accountService));
+        this.commandInvoker.addCommand("GENERATE_MONTHLY_BILL", new GenerateMonthlyBillCommand(accountService));
+        this.commandInvoker.addCommand("ADD_CREDIT_CARD_ACCOUNT", new AddCreditCardAccountCommand(accountService));
+        this.commandInvoker.addCommand("ADD_INTEREST", new AddInterestCommand(accountService));
     }
 
 
@@ -189,11 +204,11 @@ public class CardFrm extends javax.swing.JFrame {
     void JButtonNewCCAC_actionPerformed(java.awt.event.ActionEvent event) {
 		/*
 		 JDialog_AddPAcc type object is for adding personal information
-		 construct a JDialog_AddPAcc type object 
-		 set the boundaries and show it 
+		 construct a JDialog_AddPAcc type object
+		 set the boundaries and show it
 		*/
 
-        JDialog_AddCCAccount ccac = new JDialog_AddCCAccount(thisframe);
+        JDialog_AddCCAccount ccac = new JDialog_AddCCAccount(commandInvoker.getCommand("ADD_CREDIT_CARD_ACCOUNT"), thisframe);
         ccac.show();
 
         if (newaccount) {
@@ -206,7 +221,7 @@ public class CardFrm extends javax.swing.JFrame {
     }
 
     void JButtonGenerateBill_actionPerformed(java.awt.event.ActionEvent event) {
-        JDialogGenBill billFrm = new JDialogGenBill();
+        JDialogGenBill billFrm = new JDialogGenBill(commandInvoker.getCommand("GENERATE_MONTHLY_BILL"));
         billFrm.show();
     }
 
@@ -218,7 +233,7 @@ public class CardFrm extends javax.swing.JFrame {
             ccnumber = model.getValueAt(selection, 1).toString();
 
             //Show the dialog for adding deposit amount for the current mane
-            JDialog_Deposit dep = new JDialog_Deposit(thisframe, ccname);
+            JDialog_Deposit dep = new JDialog_Deposit(commandInvoker.getCommand("DEPOSIT"), thisframe, ccname);
             dep.show();
 
             updateAccountGrid();
@@ -233,7 +248,7 @@ public class CardFrm extends javax.swing.JFrame {
             ccnumber = model.getValueAt(selection, 1).toString();
 
             //Show the dialog for adding withdraw amount for the current mane
-            JDialog_Withdraw wd = new JDialog_Withdraw(thisframe, ccname);
+            JDialog_Withdraw wd = new JDialog_Withdraw(commandInvoker.getCommand("CHARGE"), thisframe, ccname);
             wd.show();
 
             updateAccountGrid();

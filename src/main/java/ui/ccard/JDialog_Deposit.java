@@ -2,6 +2,7 @@ package ui.ccard;
 
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
 
 public class JDialog_Deposit extends javax.swing.JDialog
 {
@@ -9,10 +10,13 @@ public class JDialog_Deposit extends javax.swing.JDialog
 
 	private CardFrm parentframe;
     private String name;
-    
-	public JDialog_Deposit(CardFrm parent, String aname)
+	private Command command;
+
+
+	public JDialog_Deposit(Command command, CardFrm parent, String aname)
 	{
 		super(parent);
+		this.command = command;
 
 		accountService = AccountServiceImpl.getInstance();
 
@@ -91,7 +95,8 @@ public class JDialog_Deposit extends javax.swing.JDialog
 	{
         parentframe.insertedAmount=JTextField_Deposit.getText();
 		try {
-			accountService.deposit(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
+//			accountService.deposit(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
+			command.execute(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

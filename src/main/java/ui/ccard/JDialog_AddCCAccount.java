@@ -6,6 +6,7 @@ import framework.model.Address;
 import framework.model.Customer;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
 import framework.service.create_account_factory.concrete.creditcard.BronzeCreditAccountCreator;
 import framework.service.create_account_factory.concrete.creditcard.GoldCreditAccountCreator;
 import framework.service.create_account_factory.concrete.creditcard.SilverCreditAccountCreator;
@@ -16,10 +17,13 @@ import java.util.Date;
 public class JDialog_AddCCAccount extends javax.swing.JDialog {
     private CardFrm parentframe;
     private AccountService accountService;
+    private Command command;
 
-    public JDialog_AddCCAccount(CardFrm parent) {
+
+    public JDialog_AddCCAccount(Command command, CardFrm parent) {
         super(parent);
         parentframe = parent;
+        this.command = command;
 
         accountService = AccountServiceImpl.getInstance();
 
@@ -179,14 +183,19 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
     class SymAction implements java.awt.event.ActionListener {
         public void actionPerformed(java.awt.event.ActionEvent event) {
             Object object = event.getSource();
-            if (object == JButton_OK)
-                JButtonOK_actionPerformed(event);
+            if (object == JButton_OK) {
+                try {
+                    JButtonOK_actionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             else if (object == JButton_Cancel)
                 JButtonCalcel_actionPerformed(event);
         }
     }
 
-    void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
+    void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) throws Exception {
         parentframe.ccnumber = JTextField_CCNR.getText();
         AccountCreator accountCreator;
 
@@ -205,7 +214,8 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
             customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_Email.getText(),
                 new Date().toString(), address);
         Account account = accountCreator.CreatAccount(customer, JTextField_CCNR.getText());
-        accountService.saveAccount(account);
+//        accountService.saveAccount(account);
+        command.execute(account);
 
         parentframe.newaccount = true;
 

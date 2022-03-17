@@ -2,6 +2,7 @@ package ui.ccard;
 
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
 
 
 public class JDialog_Withdraw extends javax.swing.JDialog
@@ -10,11 +11,14 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 
     private CardFrm parentframe;
     private String name;
+	private Command command;
 
-	public JDialog_Withdraw(CardFrm parent, String aname )
+
+	public JDialog_Withdraw(Command command, CardFrm parent, String aname )
 	{
 		super(parent);
 		accountService = AccountServiceImpl.getInstance();
+		this.command = command;
 
 		parentframe=parent;
 		name=aname;
@@ -92,7 +96,8 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 	{
         parentframe.insertedAmount =JTextField_AMT.getText();
 		try {
-			accountService.withdraw(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
+//			accountService.withdraw(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
+			command.execute(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,6 +6,7 @@ import framework.model.Address;
 import framework.model.Customer;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
 import framework.service.create_account_factory.concrete.banking.CheckingAccountCreator;
 import framework.service.create_account_factory.concrete.banking.SavingAccountCreator;
 import framework.service.create_account_factory.creator.AccountCreator;
@@ -16,10 +17,13 @@ import java.util.Date;
 public class JDialog_AddCompAcc extends javax.swing.JDialog {
     private CardFrm parentframe;
     private AccountService accountService;
+    private Command command;
 
-    public JDialog_AddCompAcc(CardFrm parent) {
+
+    public JDialog_AddCompAcc(Command command, CardFrm parent) {
         super(parent);
         parentframe = parent;
+        this.command = command;
 
         accountService = AccountServiceImpl.getInstance();
 
