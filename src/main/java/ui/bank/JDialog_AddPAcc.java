@@ -29,8 +29,11 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
         setTitle("Add personal account");
         setModal(true);
         getContentPane().setLayout(null);
-        setSize(283, 303);
+
+        setSize(283, 340);
+        setLocationRelativeTo(null);
         setVisible(false);
+
         JRadioButton_Chk.setText("Checkings");
         JRadioButton_Chk.setActionCommand("Checkings");
         getContentPane().add(JRadioButton_Chk);
@@ -169,21 +172,13 @@ public class JDialog_AddPAcc extends javax.swing.JDialog {
 
     void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
         parentframe.accountnr = JTextField_ACNR.getText();
-        parentframe.clientName = JTextField_NAME.getText();
-        parentframe.street = JTextField_STR.getText();
-        parentframe.city = JTextField_CT.getText();
-        parentframe.zip = JTextField_ZIP.getText();
-        parentframe.state = JTextField_ST.getText();
 
         AccountCreator accountCreator;
 
-        if (JRadioButton_Chk.isSelected()) {
-            parentframe.accountType = "Ch";
+        if (JRadioButton_Chk.isSelected())
             accountCreator = new CheckingAccountCreator();
-        } else {
-            parentframe.accountType = "S";
+        else
             accountCreator = new SavingAccountCreator();
-        }
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());

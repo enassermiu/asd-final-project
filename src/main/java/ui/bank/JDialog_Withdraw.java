@@ -1,17 +1,20 @@
 package ui.bank;
 
-import java.awt.*;
-import javax.swing.*;
+import framework.service.AccountService;
+import framework.service.AccountServiceImpl;
 
 public class JDialog_Withdraw extends javax.swing.JDialog
 {
-   
-    private BankFrm parentframe;
+	private AccountService accountService;
+
+	private BankFrm parentframe;
     private String accnr;
 
 	public JDialog_Withdraw(BankFrm parent, String aaccnr)
 	{
 		super(parent);
+		accountService = AccountServiceImpl.getInstance();
+
 		parentframe=parent;
 		accnr=aaccnr;
 		
@@ -24,8 +27,11 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 		setTitle("Withdraw");
 		setModal(true);
 		getContentPane().setLayout(null);
-		setSize(277,134);
+
+		setSize(300,150);
+		setLocationRelativeTo(null);
 		setVisible(false);
+
 		JLabel1.setText("Acc Nr");
 		getContentPane().add(JLabel1);
 		JLabel1.setForeground(java.awt.Color.black);
@@ -57,8 +63,6 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 		
 	}
 
-
-
 	
 	javax.swing.JLabel JLabel1 = new javax.swing.JLabel();
 	javax.swing.JLabel JLabel2 = new javax.swing.JLabel();
@@ -66,7 +70,6 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 	javax.swing.JTextField JTextField_AMT = new javax.swing.JTextField();
 	javax.swing.JButton JButton_OK = new javax.swing.JButton();
 	javax.swing.JButton JButton_Calcel = new javax.swing.JButton();
-
 
 
 	class SymAction implements java.awt.event.ActionListener
@@ -83,7 +86,12 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event)
 	{
-        parentframe.amountDeposit=JTextField_AMT.getText();
+        parentframe.insertedAmount =JTextField_AMT.getText();
+		try {
+			accountService.withdraw(parentframe.accountnr, Double.parseDouble(parentframe.insertedAmount));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		dispose();
 	}
 

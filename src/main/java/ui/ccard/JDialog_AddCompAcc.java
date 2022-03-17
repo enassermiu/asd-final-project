@@ -8,13 +8,10 @@ import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
 import framework.service.factory.concrete.banking.CheckingAccountCreator;
 import framework.service.factory.concrete.banking.SavingAccountCreator;
-import framework.service.factory.concrete.creditcard.BronzeCreditAccountCreator;
-import framework.service.factory.concrete.creditcard.GoldCreditAccountCreator;
-import framework.service.factory.concrete.creditcard.SilverCreditAccountCreator;
 import framework.service.factory.creator.AccountCreator;
 
-import java.awt.*;
-import javax.swing.*;
+import java.util.Date;
+
 
 public class JDialog_AddCompAcc extends javax.swing.JDialog {
     private CardFrm parentframe;
@@ -35,8 +32,11 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
         setTitle("Add compamy account");
         setModal(true);
         getContentPane().setLayout(null);
-        setSize(293, 291);
+
+        setSize(300, 380);
+        setLocationRelativeTo(null);
         setVisible(false);
+
         JRadioButton_Chk.setText("Checkings");
         JRadioButton_Chk.setActionCommand("Checkings");
         getContentPane().add(JRadioButton_Chk);
@@ -122,6 +122,7 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
     javax.swing.JTextField JTextField_STR = new javax.swing.JTextField();
     javax.swing.JTextField JTextField_ZIP = new javax.swing.JTextField();
     javax.swing.JTextField JTextField_NoOfEmp = new javax.swing.JTextField();
+    javax.swing.JTextField JTextField_CCNR = new javax.swing.JTextField();
     javax.swing.JTextField JTextField_EM = new javax.swing.JTextField();
     javax.swing.JButton JButton_OK = new javax.swing.JButton();
     javax.swing.JButton JButton_Calcel = new javax.swing.JButton();
@@ -139,38 +140,28 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
     }
 
     void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-        parentframe.clientName = JTextField_NAME.getText();
-        parentframe.street = JTextField_STR.getText();
-        parentframe.city = JTextField_CT.getText();
-        parentframe.zip = JTextField_ZIP.getText();
-        parentframe.state = JTextField_ST.getText();
-
+        parentframe.ccnumber = JTextField_CCNR.getText();
         AccountCreator accountCreator;
 
-        if (JRadioButton_Chk.isSelected()) {
-            parentframe.accountType = "Ch";
+        if (JRadioButton_Chk.isSelected())
             accountCreator = new CheckingAccountCreator();
-        } else {
-            parentframe.accountType = "S";
+        else
             accountCreator = new SavingAccountCreator();
-        }
+
 
 //		if (JRadioButton_Gold.isSelected()) {
-//			parentframe.accountType = "Gold";
 //			accountCreator = new GoldCreditAccountCreator();
 //		} else if (JRadioButton_Silver.isSelected()) {
-//			parentframe.accountType = "Silver";
 //			accountCreator = new SilverCreditAccountCreator();
 //		} else {
-//			parentframe.accountType = "Bronze";
 //			accountCreator = new BronzeCreditAccountCreator();
 //		}
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());
         Customer customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_NoOfEmp.getText(),
-                "00/00/0000", address);
-        Account account = accountCreator.CreatAccount(customer, "000");
+                new Date().toString(), address);
+        Account account = accountCreator.CreatAccount(customer, JTextField_CCNR.getText());
         accountService.saveAccount(account);
 
         parentframe.newaccount = true;
@@ -180,6 +171,5 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
 
     void JButtonCalcel_actionPerformed(java.awt.event.ActionEvent event) {
         dispose();
-
     }
 }

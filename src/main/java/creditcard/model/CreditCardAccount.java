@@ -3,6 +3,9 @@ package creditcard.model;
 import framework.model.Account;
 import framework.model.Customer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public abstract class CreditCardAccount extends Account {
 
     private String ccNumber;
@@ -10,6 +13,9 @@ public abstract class CreditCardAccount extends Account {
 
     public CreditCardAccount(Customer customer, String accountNumber) {
         super(customer, accountNumber);
+        ccNumber = accountNumber;
+
+        this.expirationDate = new SimpleDateFormat("mm/dd/yyyy").format(new Date()).toString();
     }
 
     public CreditCardAccount(Customer customer, String accountNumber, String ccNumber, String  expirationDate) {

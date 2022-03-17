@@ -4,6 +4,8 @@ import banking.model.PersonalAccount;
 import banking.model.SavingAccount;
 import banking.repository.AccountDAO;
 import banking.repository.AccountDAOImpl;
+import creditcard.model.CreditCardAccount;
+import creditcard.model.GoldCredit;
 import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
@@ -57,10 +59,17 @@ public class AccountServiceImpl implements AccountService {
         return accountDAO.getAccounts();
     }
 
-    public void withdraw(String accountNumber, double amount) {
+    public void withdraw(String accountNumber, double amount) throws Exception {
         Account account = accountDAO.loadAccount(accountNumber);
-        account.withdraw(amount);
-        accountDAO.updateAccount(account);
+
+        if (account == null) {
+            throw new Exception("Account Not Found!");
+        } else if (amount < 0) {
+            throw new Exception("Can't withdraw a negative amount!");
+        } else {
+            account.withdraw(amount);
+            accountDAO.updateAccount(account);
+        }
     }
 
     public void addInterest(String accountNumber) {
@@ -74,13 +83,30 @@ public class AccountServiceImpl implements AccountService {
         });
     }
 
-    public void seedsAccounts(){
+    public void seedBankAccounts(){
         Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
         Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
         Account[] accounts = {
                 new SavingAccount(customer, "100")
         };
 
-        Arrays.stream(accounts).forEach(a -> saveAccount(a));
+        Arrays.stream(accounts).forEach(a -> {
+            a.deposit(100);
+            saveAccount(a);
+        });
+    }
+
+    public void seedCreditAccounts(){
+        Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
+        Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
+        CreditCardAccount[] accounts = {
+                new GoldCredit(customer, "100")
+        };
+
+        Arrays.stream(accounts).forEach(a -> {
+            a.deposit(100);
+            a.setExpirationDate("01/02/2025");
+            saveAccount(a);
+        });
     }
 }

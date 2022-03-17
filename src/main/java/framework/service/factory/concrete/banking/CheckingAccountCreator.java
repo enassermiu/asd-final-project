@@ -1,5 +1,6 @@
 package framework.service.factory.concrete.banking;
 
+import banking.model.CheckingAccount;
 import banking.model.SavingAccount;
 import framework.model.Account;
 import framework.model.Customer;
@@ -9,6 +10,6 @@ public class CheckingAccountCreator extends AccountCreator {
 
     @Override
     public Account CreatAccount(Customer customer, String accountNumber) {
-        return new SavingAccount(customer, accountNumber);
+        return new CheckingAccount(customer, accountNumber);
     }
 }

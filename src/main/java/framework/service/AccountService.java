@@ -11,10 +11,11 @@ public interface AccountService {
     Collection<Account> getAllAccounts();
 
     void deposit (String accountNumber, double amount) throws Exception;
-    void withdraw (String accountNumber, double amount);
+    void withdraw (String accountNumber, double amount)  throws Exception;
 
     void addInterest(String accountNumber);
     void addInterest();
 
-    void seedsAccounts();
+    void seedBankAccounts();
+    void seedCreditAccounts();
 }
