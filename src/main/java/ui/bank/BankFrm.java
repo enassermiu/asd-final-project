@@ -1,8 +1,10 @@
 package ui.bank;
 
+import banking.commands.*;
 import framework.model.Account;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.CommandInvoker;
 
 import java.awt.*;
 import java.util.Collection;
@@ -15,6 +17,7 @@ import javax.swing.*;
 public class BankFrm extends javax.swing.JFrame {
 
     private AccountService accountService;
+    private CommandInvoker commandInvoker;
 
     /****
      * init variables in the object
@@ -31,6 +34,7 @@ public class BankFrm extends javax.swing.JFrame {
 
         accountService = AccountServiceImpl.getInstance();
         accountService.seedBankAccounts();
+        this.commandInvoker = new CommandInvoker();
 
         setTitle("Bank Application.");
         setDefaultCloseOperation(javax.swing.JFrame.DO_NOTHING_ON_CLOSE);
@@ -102,6 +106,16 @@ public class BankFrm extends javax.swing.JFrame {
         JButton_Addinterest.addActionListener(lSymAction);
 
         updateAccountGrid();
+
+        setCommands();
+    }
+
+    private void setCommands() {
+        this.commandInvoker.addCommand("DEPOSIT", new DepositCommand(accountService));
+        this.commandInvoker.addCommand("WITHDRAW", new WithdrawCommand(accountService));
+        this.commandInvoker.addCommand("ADD_INTEREST", new AddInterestCommand(accountService));
+        this.commandInvoker.addCommand("ADD_PERSONAL_ACCOUNT", new AddPersonalAccountCommand(accountService));
+        this.commandInvoker.addCommand("ADD_COMPANY_ACCOUNT", new AddCompanyAccountCommand(accountService));
     }
 
 
@@ -181,8 +195,13 @@ public class BankFrm extends javax.swing.JFrame {
                 JButtonDeposit_actionPerformed(event);
             else if (object == JButton_Withdraw)
                 JButtonWithdraw_actionPerformed(event);
-            else if (object == JButton_Addinterest)
-                JButtonAddinterest_actionPerformed(event);
+            else if (object == JButton_Addinterest) {
+                try {
+                    JButtonAddinterest_actionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
         }
     }
@@ -200,7 +219,7 @@ public class BankFrm extends javax.swing.JFrame {
 		 set the boundaries and show it 
 		*/
 
-        JDialog_AddPAcc pac = new JDialog_AddPAcc(myframe);
+        JDialog_AddPAcc pac = new JDialog_AddPAcc(commandInvoker.getCommand("ADD_PERSONAL_ACCOUNT"), myframe);
         pac.show();
 
         if (newaccount) {
@@ -219,7 +238,7 @@ public class BankFrm extends javax.swing.JFrame {
 		 show it 
 		*/
 
-        JDialog_AddCompAcc pac = new JDialog_AddCompAcc(myframe);
+        JDialog_AddCompAcc pac = new JDialog_AddCompAcc(commandInvoker.getCommand("ADD_COMPANY_ACCOUNT"), myframe);
         pac.show();
 
         if (newaccount) {
@@ -237,7 +256,7 @@ public class BankFrm extends javax.swing.JFrame {
             accountnr = model.getValueAt(selection, 0).toString();
 
             //Show the dialog for adding deposit amount for the current mane
-            JDialog_Deposit dep = new JDialog_Deposit(myframe, accountnr);
+            JDialog_Deposit dep = new JDialog_Deposit(commandInvoker.getCommand("DEPOSIT"), myframe, accountnr);
             dep.show();
 
             updateAccountGrid();
@@ -251,15 +270,15 @@ public class BankFrm extends javax.swing.JFrame {
             accountnr = model.getValueAt(selection, 0).toString();
 
             //Show the dialog for adding withdraw amount for the current mane
-            JDialog_Withdraw wd = new JDialog_Withdraw(myframe, accountnr);
+            JDialog_Withdraw wd = new JDialog_Withdraw(commandInvoker.getCommand("WITHDRAW"), myframe, accountnr);
             wd.show();
 
             updateAccountGrid();
         }
     }
 
-    void JButtonAddinterest_actionPerformed(java.awt.event.ActionEvent event) {
-        accountService.addInterest();
+    void JButtonAddinterest_actionPerformed(java.awt.event.ActionEvent event) throws Exception {
+        commandInvoker.getCommand("ADD_INTEREST").execute();
         updateAccountGrid();
 
         JOptionPane.showMessageDialog(JButton_Addinterest, "Add interest to all accounts",

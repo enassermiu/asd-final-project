@@ -34,7 +34,6 @@ public class AccountServiceImpl implements AccountService {
 
     public Account saveAccount(Account account) {
         accountDAO.saveAccount(account);
-
         return account;
     }
 
@@ -66,6 +65,8 @@ public class AccountServiceImpl implements AccountService {
             throw new Exception("Account Not Found!");
         } else if (amount < 0) {
             throw new Exception("Can't withdraw a negative amount!");
+        } else if (account.getBalance() < amount) {
+            throw new Exception("Can't withdraw more than your current balance: " + account.getBalance());
         } else {
             account.withdraw(amount);
             accountDAO.updateAccount(account);
@@ -78,8 +79,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void addInterest() {
-        getAllAccounts().forEach(account -> {
-            account.addInterest();
+        getAllAccounts().forEach(a -> {
+            a.addInterest();
         });
     }
 

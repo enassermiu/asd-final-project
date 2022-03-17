@@ -2,18 +2,19 @@ package ui.bank;
 
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
+import framework.service.command.CommandInvoker;
 
 public class JDialog_Deposit extends javax.swing.JDialog
 {
-	private AccountService accountService;
-
     private BankFrm parentframe;
     private String accnr;
+	private Command command;
     
-	public JDialog_Deposit(BankFrm parent, String aaccnr)
+	public JDialog_Deposit(Command command, BankFrm parent, String aaccnr)
 	{
 		super(parent);
-		accountService = AccountServiceImpl.getInstance();
+		this.command = command;
 
 		parentframe=parent;
 		accnr=aaccnr;
@@ -90,7 +91,9 @@ public class JDialog_Deposit extends javax.swing.JDialog
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event)  {
         parentframe.insertedAmount =JTextField_Deposit.getText();
 		try {
-			accountService.deposit(parentframe.accountnr, Double.parseDouble(parentframe.insertedAmount));
+			String accountNumber = parentframe.accountnr;
+			String amount = parentframe.insertedAmount;
+			command.execute(accountNumber, amount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

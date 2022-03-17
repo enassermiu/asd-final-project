@@ -2,18 +2,18 @@ package ui.bank;
 
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
+import framework.service.command.Command;
 
 public class JDialog_Withdraw extends javax.swing.JDialog
 {
-	private AccountService accountService;
-
 	private BankFrm parentframe;
     private String accnr;
+	private Command command;
 
-	public JDialog_Withdraw(BankFrm parent, String aaccnr)
+	public JDialog_Withdraw(Command command, BankFrm parent, String aaccnr)
 	{
 		super(parent);
-		accountService = AccountServiceImpl.getInstance();
+		this.command = command;
 
 		parentframe=parent;
 		accnr=aaccnr;
@@ -88,7 +88,9 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 	{
         parentframe.insertedAmount =JTextField_AMT.getText();
 		try {
-			accountService.withdraw(parentframe.accountnr, Double.parseDouble(parentframe.insertedAmount));
+			String accountNumber = parentframe.accountnr;
+			String amount = parentframe.insertedAmount;
+			command.execute(accountNumber, amount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
