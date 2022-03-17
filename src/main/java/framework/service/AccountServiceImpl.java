@@ -10,11 +10,8 @@ import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -87,7 +84,7 @@ public class AccountServiceImpl implements AccountService {
         });
     }
 
-    public void seedBankAccounts(){
+    public void seedBankAccounts() {
         Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
         Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
         Account[] accounts = {
@@ -100,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
         });
     }
 
-    public void seedCreditAccounts(){
+    public void seedCreditAccounts() {
         Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
         Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
         CreditCardAccount[] accounts = {
@@ -113,11 +110,4 @@ public class AccountServiceImpl implements AccountService {
             saveAccount(a);
         });
     }
-
-    @Override
-    public List<String> generateReport(String[] accountNumbers, LocalDate from, LocalDate to) {
-        return null;
-    }
-
-
 }
