@@ -10,19 +10,22 @@ public class SavingAccount extends Account {
     }
 
     @Override
-    public void withdraw(double amount){
-        if(amount>500)
-            notifyObservers("Transaction over $500");
-        super.withdraw(amount);
-    }
-
-    @Override
     public String getAccountTypeCode() {
         return "S";
     }
 
     @Override
     public void addInterest() {
+        deposit(getBalance() * 0.08, "Interest");
+    }
 
+    @Override
+    public void newDepositTransactionInserted(double amount, String description) {
+        getCustomer().newBankTransactionAlert(this, amount, description);
+    }
+
+    @Override
+    public void newWithdrawTransactionInserted(double amount, String description) {
+        getCustomer().newBankTransactionAlert(this, amount, description);
     }
 }

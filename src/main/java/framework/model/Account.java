@@ -29,17 +29,28 @@ public abstract class Account implements Observable {
         return balance;
     }
 
-    public void deposit(double amount) {
-        AccountEntry entry = new AccountEntry(amount, "deposit", "", "");
-        entryList.add(entry);
-//        notifyObservers("The amount " + amount + " has been depoited");
+    public final void deposit(double amount) {
+        deposit(amount, "deposit");
     }
 
-    public void withdraw(double amount) {
+    public final void deposit(double amount, String description) {
+        AccountEntry entry = new AccountEntry(amount, description, "", "");
+        entryList.add(entry);
 
+        String transactionDesc ="The amount: '" + amount + "' has been deposited to your account: '"
+                + getAccountTypeCode() + "-" + getAccountNumber() + "'";
+
+        newDepositTransactionInserted(amount, transactionDesc);
+    }
+
+    public final void withdraw(double amount) {
         AccountEntry entry = new AccountEntry(-amount, "withdraw", "", "");
         entryList.add(entry);
 
+        String transactionDesc = "The amount: '" + amount + "' has been withdrawn from your account: '"
+                + getAccountTypeCode() + "-" + getAccountNumber() + "'";
+
+        newWithdrawTransactionInserted(amount, transactionDesc);
     }
 
     public String getAccountNumber() {
@@ -60,8 +71,6 @@ public abstract class Account implements Observable {
         this.customer = customer;
     }
 
-    public abstract void addInterest();
-
     public void add(Observer o) {
         observers.add(o);
     }
@@ -75,4 +84,8 @@ public abstract class Account implements Observable {
             o.send(this.getCustomer().getEmail(), message);
         }
     }
+
+    public abstract void addInterest();
+    public abstract void newDepositTransactionInserted(double amount, String description);
+    public abstract void newWithdrawTransactionInserted(double amount, String description);
 }

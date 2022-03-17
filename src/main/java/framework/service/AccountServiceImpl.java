@@ -78,8 +78,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     public void addInterest() {
-        getAllAccounts().forEach(a -> {
-            a.addInterest();
+        getAllAccounts().forEach(account -> {
+            account.addInterest();
         });
     }
 

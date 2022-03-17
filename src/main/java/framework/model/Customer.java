@@ -50,4 +50,7 @@ public abstract class Customer {
 	public void setAccounts(List<Account> accounts) {
 		this.accounts = accounts;
 	}
+
+	public abstract void newBankTransactionAlert(Account account, double amount, String description);
+	public abstract void newCreditTransactionAlert(Account account, double amount, String description);
 }

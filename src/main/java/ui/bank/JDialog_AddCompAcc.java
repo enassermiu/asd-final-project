@@ -1,18 +1,14 @@
 package ui.bank;
 
 import banking.model.CompanyAccount;
-import banking.model.PersonalAccount;
 import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
-import framework.service.factory.concrete.banking.CheckingAccountCreator;
-import framework.service.factory.concrete.banking.SavingAccountCreator;
-import framework.service.factory.creator.AccountCreator;
-
-import java.awt.*;
-import javax.swing.*;
+import framework.service.create_account_factory.concrete.banking.CheckingAccountCreator;
+import framework.service.create_account_factory.concrete.banking.SavingAccountCreator;
+import framework.service.create_account_factory.creator.AccountCreator;
 
 public class JDialog_AddCompAcc extends javax.swing.JDialog {
     private BankFrm parentframe;
