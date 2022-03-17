@@ -23,7 +23,7 @@ public class AccountDAOImpl implements AccountDAO {
 
 	public Account loadAccount(String accountNumber) {
 		for (Account account : accountlist) {
-			if (account.getAccountNumber() == accountNumber) {
+			if (account.getAccountNumber().equals(accountNumber)){
 				return account;
 			}
 		}

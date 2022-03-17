@@ -10,9 +10,22 @@ public class CheckingAccount extends Account {
     }
 
     @Override
-    public void addInterest() {
-
+    public String getAccountTypeCode() {
+        return "C";
     }
 
+    @Override
+    public void addInterest() {
+        deposit(getBalance() * 0.05, "Interest");
+    }
 
+    @Override
+    public void newDepositTransactionInserted(double amount, String description) {
+        getCustomer().newBankTransactionAlert(this, amount, description);
+    }
+
+    @Override
+    public void newWithdrawTransactionInserted(double amount, String description) {
+        getCustomer().newBankTransactionAlert(this, amount, description);
+    }
 }

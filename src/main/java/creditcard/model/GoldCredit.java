@@ -13,7 +13,17 @@ public class GoldCredit extends CreditCardAccount {
     }
 
     @Override
-    public void addInterest() {
+    public String getAccountTypeCode() {
+        return "G";
+    }
 
+    @Override
+    public void setMonthlyInterestRate() {
+        setMI(0.06);
+    }
+
+    @Override
+    public void setMinimumPayment() {
+        setMP(0.10);
     }
 }

@@ -1,4 +1,4 @@
-package framework.service.factory.creator;
+package framework.service.create_account_factory.creator;
 
 import framework.model.Account;
 import framework.model.Customer;

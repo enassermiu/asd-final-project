@@ -12,11 +12,9 @@ import java.util.List;
 public abstract class Account implements Observable {
 
     private String accountNumber;
-
     private Customer customer;
 
     private List<AccountEntry> entryList = new ArrayList<AccountEntry>();
-
     private List<Observer> observers = new ArrayList<>();
 
     public Account(Customer customer, String accountNumber) {
@@ -33,45 +31,31 @@ public abstract class Account implements Observable {
         return balance;
     }
 
-    public void deposit(double amount) {
-
-        AccountEntry entry = new AccountEntry(amount, "deposit", "", "");
-
-        //track remaining balance
-        entry.setRemainingBalance(getBalance());
-        entryList.add(entry);
-//        notifyObservers("The amount " + amount + " has been depoited");
+    public final void deposit(double amount) {
+        deposit(amount, "deposit");
     }
 
-    public void withdraw(double amount) {
+    public final void deposit(double amount, String description) {
+        AccountEntry entry = new AccountEntry(amount, description, "", "");
+        entryList.add(entry);
+
+        String transactionDesc ="The amount: '" + amount + "' has been deposited to your account: '"
+                + getAccountTypeCode() + "-" + getAccountNumber() + "'";
+
+        newDepositTransactionInserted(amount, transactionDesc);
+    }
+
+    public final void withdraw(double amount) {
         AccountEntry entry = new AccountEntry(-amount, "withdraw", "", "");
 
         //track remaining balance
         entry.setRemainingBalance(getBalance());
         entryList.add(entry);
 
-    }
+        String transactionDesc = "The amount: '" + amount + "' has been withdrawn from your account: '"
+                + getAccountTypeCode() + "-" + getAccountNumber() + "'";
 
-    private void addEntry(AccountEntry entry) {
-        entryList.add(entry);
-    }
-
-    public void transferFunds(Account toAccount, double amount, String description) {
-        AccountEntry fromEntry = new AccountEntry(-amount, description, toAccount.getAccountNumber(),
-                toAccount.getCustomer().getName());
-        AccountEntry toEntry = new AccountEntry(amount, description, toAccount.getAccountNumber(),
-                toAccount.getCustomer().getName());
-
-
-        //track remaining balance
-        fromEntry.setRemainingBalance(getBalance());
-        entryList.add(fromEntry);
-
-        toAccount.addEntry(toEntry);
-    }
-
-    public List<AccountEntry> getEntryList() {
-        return entryList;
+        newWithdrawTransactionInserted(amount, transactionDesc);
     }
 
     public String getAccountNumber() {
@@ -82,6 +66,8 @@ public abstract class Account implements Observable {
         this.accountNumber = accountNumber;
     }
 
+    public abstract String getAccountTypeCode();
+
     public Customer getCustomer() {
         return customer;
     }
@@ -89,8 +75,6 @@ public abstract class Account implements Observable {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
-
-    public abstract void addInterest();
 
     public void add(Observer o) {
         observers.add(o);
@@ -105,4 +89,8 @@ public abstract class Account implements Observable {
             o.send(this.getCustomer().getEmail(), message);
         }
     }
+
+    public abstract void addInterest();
+    public abstract void newDepositTransactionInserted(double amount, String description);
+    public abstract void newWithdrawTransactionInserted(double amount, String description);
 }

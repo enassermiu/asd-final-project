@@ -1,19 +1,17 @@
 package ui.ccard;
-/*
-		A basic implementation of the JDialog class.
-*/
 
-import banking.model.CompanyAccount;
+import banking.model.PersonalAccount;
 import framework.model.Account;
 import framework.model.Address;
 import framework.model.Customer;
 import framework.service.AccountService;
 import framework.service.AccountServiceImpl;
-import framework.service.factory.concrete.banking.CheckingAccountCreator;
-import framework.service.factory.concrete.creditcard.BronzeCreditAccountCreator;
-import framework.service.factory.concrete.creditcard.GoldCreditAccountCreator;
-import framework.service.factory.concrete.creditcard.SilverCreditAccountCreator;
-import framework.service.factory.creator.AccountCreator;
+import framework.service.create_account_factory.concrete.creditcard.BronzeCreditAccountCreator;
+import framework.service.create_account_factory.concrete.creditcard.GoldCreditAccountCreator;
+import framework.service.create_account_factory.concrete.creditcard.SilverCreditAccountCreator;
+import framework.service.create_account_factory.creator.AccountCreator;
+
+import java.util.Date;
 
 public class JDialog_AddCCAccount extends javax.swing.JDialog {
     private CardFrm parentframe;
@@ -34,8 +32,11 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
         setTitle("Add credit card account");
         setModal(true);
         getContentPane().setLayout(null);
-        setSize(301, 373);
+
+        setSize(301, 380);
+        setLocationRelativeTo(null);
         setVisible(false);
+
         JRadioButton_Gold.setText("Gold");
         JRadioButton_Gold.setActionCommand("Checkings");
         getContentPane().add(JRadioButton_Gold);
@@ -152,8 +153,6 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
                 JRadioButtonSav_mouseClicked(event);
             else if (object == JRadioButton_Bronze)
                 JRadioButtonBronze_mouseClicked(event);
-
-
         }
     }
 
@@ -188,30 +187,20 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
     }
 
     void JButtonOK_actionPerformed(java.awt.event.ActionEvent event) {
-        parentframe.clientName = JTextField_NAME.getText();
-        parentframe.street = JTextField_STR.getText();
-        parentframe.city = JTextField_CT.getText();
-        parentframe.zip = JTextField_ZIP.getText();
-        parentframe.state = JTextField_ST.getText();
         parentframe.ccnumber = JTextField_CCNR.getText();
-        parentframe.expdate = JTextField_ExpDate.getText();
-
         AccountCreator accountCreator;
 
-        if (JRadioButton_Gold.isSelected()) {
-            parentframe.accountType = "Gold";
+        if (JRadioButton_Gold.isSelected())
             accountCreator = new GoldCreditAccountCreator();
-        } else if (JRadioButton_Silver.isSelected()) {
-            parentframe.accountType = "Silver";
+        else if (JRadioButton_Silver.isSelected())
             accountCreator = new SilverCreditAccountCreator();
-        } else {
-            parentframe.accountType = "Bronze";
+        else
             accountCreator = new BronzeCreditAccountCreator();
-        }
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());
-        Customer customer = new Customer(JTextField_NAME.getText(), JTextField_Email.getText(), address);
+        Customer customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_Email.getText(),
+                new Date().toString(), address);
         Account account = accountCreator.CreatAccount(customer, JTextField_CCNR.getText());
         accountService.saveAccount(account);
 

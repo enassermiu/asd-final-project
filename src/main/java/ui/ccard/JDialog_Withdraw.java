@@ -1,19 +1,21 @@
 package ui.ccard;
 
-import java.awt.*;
-import javax.swing.*;
-
+import framework.service.AccountService;
+import framework.service.AccountServiceImpl;
 
 
 public class JDialog_Withdraw extends javax.swing.JDialog
 {
-   
+   private AccountService accountService;
+
     private CardFrm parentframe;
     private String name;
 
-	public JDialog_Withdraw(CardFrm parent, String aname)
+	public JDialog_Withdraw(CardFrm parent, String aname )
 	{
 		super(parent);
+		accountService = AccountServiceImpl.getInstance();
+
 		parentframe=parent;
 		name=aname;
 		
@@ -26,8 +28,11 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 		setTitle("Charge Account");
 		setModal(true);
 		getContentPane().setLayout(null);
-		setSize(277,134);
+
+		setSize(300,150);
+		setLocationRelativeTo(null);
 		setVisible(false);
+
 		JLabel1.setText("Name");
 		getContentPane().add(JLabel1);
 		JLabel1.setForeground(java.awt.Color.black);
@@ -85,7 +90,12 @@ public class JDialog_Withdraw extends javax.swing.JDialog
 
 	void JButtonOK_actionPerformed(java.awt.event.ActionEvent event)
 	{
-        parentframe.amountDeposit=JTextField_AMT.getText();
+        parentframe.insertedAmount =JTextField_AMT.getText();
+		try {
+			accountService.withdraw(parentframe.ccnumber, Double.parseDouble(parentframe.insertedAmount));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		dispose();
 	}
 

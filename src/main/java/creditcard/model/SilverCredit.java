@@ -13,7 +13,17 @@ public class SilverCredit extends CreditCardAccount {
     }
 
     @Override
-    public void addInterest() {
+    public String getAccountTypeCode() {
+        return "S";
+    }
 
+    @Override
+    public void setMonthlyInterestRate() {
+        setMI(0.08);
+    }
+
+    @Override
+    public void setMinimumPayment() {
+        setMP(0.12);
     }
 }

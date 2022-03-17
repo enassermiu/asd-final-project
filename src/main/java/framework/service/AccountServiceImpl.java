@@ -1,11 +1,18 @@
 package framework.service;
 
+import banking.model.PersonalAccount;
+import banking.model.SavingAccount;
 import banking.repository.AccountDAO;
 import banking.repository.AccountDAOImpl;
+import creditcard.model.CreditCardAccount;
+import creditcard.model.GoldCredit;
 import framework.model.Account;
+import framework.model.Address;
+import framework.model.Customer;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,11 +41,16 @@ public class AccountServiceImpl implements AccountService {
         return account;
     }
 
-    public void deposit(String accountNumber, double amount) {
+    public void deposit(String accountNumber, double amount) throws Exception {
         Account account = accountDAO.loadAccount(accountNumber);
-        account.deposit(amount);
-
-        accountDAO.updateAccount(account);
+        if (account == null) {
+            throw new Exception("Account Not Found!");
+        } else if (amount < 0) {
+            throw new Exception("Can't Deposit a negative amount!");
+        } else {
+            account.deposit(amount);
+            accountDAO.updateAccount(account);
+        }
     }
 
     public Account getAccount(String accountNumber) {
@@ -50,24 +62,55 @@ public class AccountServiceImpl implements AccountService {
         return accountDAO.getAccounts();
     }
 
-    public void withdraw(String accountNumber, double amount) {
+    public void withdraw(String accountNumber, double amount) throws Exception {
         Account account = accountDAO.loadAccount(accountNumber);
-        account.withdraw(amount);
-        accountDAO.updateAccount(account);
+
+        if (account == null) {
+            throw new Exception("Account Not Found!");
+        } else if (amount < 0) {
+            throw new Exception("Can't withdraw a negative amount!");
+        } else {
+            account.withdraw(amount);
+            accountDAO.updateAccount(account);
+        }
     }
 
-    public void transferFunds(String fromAccountNumber, String toAccountNumber, double amount, String description) {
-        Account fromAccount = accountDAO.loadAccount(fromAccountNumber);
-        Account toAccount = accountDAO.loadAccount(toAccountNumber);
-        fromAccount.transferFunds(toAccount, amount, description);
-        accountDAO.updateAccount(fromAccount);
-        accountDAO.updateAccount(toAccount);
-    }
-
-    @Override
     public void addInterest(String accountNumber) {
         Account account = accountDAO.loadAccount(accountNumber);
         account.addInterest();
+    }
+
+    public void addInterest() {
+        getAllAccounts().forEach(account -> {
+            account.addInterest();
+        });
+    }
+
+    public void seedBankAccounts(){
+        Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
+        Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
+        Account[] accounts = {
+                new SavingAccount(customer, "100")
+        };
+
+        Arrays.stream(accounts).forEach(a -> {
+            a.deposit(100);
+            saveAccount(a);
+        });
+    }
+
+    public void seedCreditAccounts(){
+        Address address = new Address("1000 N 4th St", "Fairfield", "IA", "52577");
+        Customer customer = new PersonalAccount("Customer1", "customer1@gmail.com", "00/00/0000", address);
+        CreditCardAccount[] accounts = {
+                new GoldCredit(customer, "100")
+        };
+
+        Arrays.stream(accounts).forEach(a -> {
+            a.deposit(100);
+            a.setExpirationDate("01/02/2025");
+            saveAccount(a);
+        });
     }
 
     @Override
