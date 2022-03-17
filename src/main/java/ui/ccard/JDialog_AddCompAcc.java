@@ -159,7 +159,10 @@ public class JDialog_AddCompAcc extends javax.swing.JDialog {
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());
-        Customer customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_NoOfEmp.getText(),
+        Customer customer = accountService.getCustomer(JTextField_EM.getText());
+
+        if (customer == null)
+            customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_NoOfEmp.getText(),
                 new Date().toString(), address);
         Account account = accountCreator.CreatAccount(customer, JTextField_CCNR.getText());
         accountService.saveAccount(account);

@@ -1,6 +1,7 @@
 package framework.service;
 
 import framework.model.Account;
+import framework.model.Customer;
 
 import java.util.Collection;
 
@@ -18,4 +19,5 @@ public interface AccountService {
 
     void seedBankAccounts();
     void seedCreditAccounts();
+    Customer getCustomer(String email);
 }

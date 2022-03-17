@@ -199,7 +199,10 @@ public class JDialog_AddCCAccount extends javax.swing.JDialog {
 
         Address address = new Address(JTextField_STR.getText(), JTextField_CT.getText(),
                 JTextField_ST.getText(), JTextField_ZIP.getText());
-        Customer customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_Email.getText(),
+        Customer customer = accountService.getCustomer(JTextField_Email.getText());
+
+        if (customer == null)
+            customer = new PersonalAccount(JTextField_NAME.getText(), JTextField_Email.getText(),
                 new Date().toString(), address);
         Account account = accountCreator.CreatAccount(customer, JTextField_CCNR.getText());
         accountService.saveAccount(account);

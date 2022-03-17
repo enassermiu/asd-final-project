@@ -12,6 +12,7 @@ import framework.model.Customer;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AccountServiceImpl implements AccountService {
 
@@ -109,5 +110,16 @@ public class AccountServiceImpl implements AccountService {
             a.setExpirationDate("01/02/2025");
             saveAccount(a);
         });
+    }
+
+    public Customer getCustomer(String email) {
+        Customer customer = null;
+
+        for (Account a : getAllAccounts()) {
+            if (a.getCustomer().getEmail().equals(email))
+                customer =a.getCustomer();
+        }
+
+        return customer;
     }
 }
