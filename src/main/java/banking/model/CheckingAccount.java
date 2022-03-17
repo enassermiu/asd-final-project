@@ -11,7 +11,7 @@ public class CheckingAccount extends Account {
 
     @Override
     public String getAccountTypeCode() {
-        return "C";
+        return "Ch";
     }
 
     @Override

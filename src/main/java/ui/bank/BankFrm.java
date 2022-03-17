@@ -272,8 +272,8 @@ public class BankFrm extends javax.swing.JFrame {
         data[0] = account.getAccountNumber();
         data[1] = account.getCustomer().getName();
         data[2] = account.getCustomer().getAddress().getCity();
-        data[3] = account.getAccountTypeCode();
-        data[4] = account.getCustomer().getCustomerTpeCode();
+        data[3] = account.getCustomer().getCustomerTpeCode();
+        data[4] = account.getAccountTypeCode();
         data[5] = account.getBalance();
 
         model.addRow(data);

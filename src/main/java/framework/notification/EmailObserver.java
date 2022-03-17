@@ -65,7 +65,7 @@ public class EmailObserver implements Observer {
 
             Transport.send(message);
             System.out.println("Sent message successfully....");
-        } catch (MessagingException mex) {
+        } catch (Exception mex) {
             mex.printStackTrace();
         }
 
